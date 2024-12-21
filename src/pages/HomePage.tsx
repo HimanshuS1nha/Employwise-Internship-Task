@@ -1,14 +1,16 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import Loader from "@/components/Loader";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import BrandLogo from "@/components/BrandLogo";
+import UserCard from "@/components/UserCard";
+import DeleteUserDialog from "@/components/DeleteUserDialog";
+import PaginationControls from "@/components/PaginationControls";
 
 import type { UserType } from "../../types";
 
@@ -19,15 +21,30 @@ const HomePage = () => {
     ? parseInt(searchParams.get("page")!)
     : 1;
 
+  const [users, setUsers] = useState<UserType[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [showDeleteUserDialog, setShowDeleteUserDialog] = useState(false);
+
+  const filteredUsers = users.filter(
+    (user) =>
+      user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      user.last_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const { data, isLoading, error } = useQuery({
     queryKey: [`get-users-${currentPage}`],
     queryFn: async () => {
-      const { data } = await axios.get(
-        `https://reqres.in/api/users?page=${currentPage}`
-      );
-      return data as {
-        data: UserType[];
-        total_pages: number;
+      const { data: data1 } = (await axios.get(
+        `https://reqres.in/api/users?page=1`
+      )) as { data: { data: UserType[]; total_pages: number } };
+      const { data: data2 } = (await axios.get(
+        `https://reqres.in/api/users?page=2`
+      )) as { data: { data: UserType[]; total_pages: number } };
+
+      return {
+        totalPages: data1.total_pages,
+        data: [...data1.data, ...data2.data],
       };
     },
   });
@@ -38,8 +55,55 @@ const HomePage = () => {
       toast.error("Some error occured. Please try again later!");
     }
   }
+
+  const { mutate: handleDeleteUser, isPending: deleteUserPending } =
+    useMutation({
+      mutationKey: ["delete-user"],
+      mutationFn: async () => {
+        if (!selectedUser) {
+          throw new Error("User not found");
+        }
+
+        const { data } = await axios.delete(
+          `https://reqres.in/api/users/${selectedUser.id}`
+        );
+        return data;
+      },
+      onSuccess: () => {
+        // Remove the user from the list
+        setUsers((prev) => {
+          const newUsers = prev.filter((user) => user.id !== selectedUser!.id);
+          return newUsers;
+        });
+        toast.success("User deleted successfully");
+        setSelectedUser(null);
+        setShowDeleteUserDialog(false);
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError && error.response?.data.error) {
+          toast.error(error.response.data.error);
+        } else {
+          toast.error("Some error occured. Please try again later!");
+        }
+      },
+    });
+
+  useEffect(() => {
+    if (data) {
+      if (users.length === 0) {
+        setUsers(data.data);
+      }
+    }
+  }, [data]);
   return (
     <main className="w-full h-[100dvh] flex flex-col items-center gap-y-10 mt-6 relative">
+      <DeleteUserDialog
+        isVisible={showDeleteUserDialog}
+        deleteUser={handleDeleteUser}
+        isPending={deleteUserPending}
+        setIsVisible={setShowDeleteUserDialog}
+      />
+
       <Button
         variant={"destructive"}
         className="fixed top-5 right-5"
@@ -53,7 +117,12 @@ const HomePage = () => {
 
       <BrandLogo />
 
-      <Input placeholder="Search users by name..." className="w-[75%]" />
+      <Input
+        placeholder="Search users by name..."
+        className="w-[75%]"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
 
       <div className="flex flex-wrap gap-5 items-center justify-center w-[75%]">
         {isLoading ? (
@@ -61,55 +130,27 @@ const HomePage = () => {
             <Loader className="size-10 animate-spin" color="blue" />
           </div>
         ) : (
-          data?.data?.map((item) => {
-            return (
-              <Card key={item.id} className="w-[350px]">
-                <CardHeader className="items-center gap-y-3">
-                  <img
-                    src={item.avatar}
-                    alt={item.first_name}
-                    className="rounded-full"
-                  />
-                  <CardTitle>
-                    {item.first_name} {item.last_name}
-                  </CardTitle>
-                </CardHeader>
-                <CardFooter className="flex justify-center gap-x-4">
-                  <Button>
-                    <Pencil size={20} color="white" />
-                  </Button>
-                  <Button variant={"destructive"}>
-                    <Trash2 size={20} color="white" />
-                  </Button>
-                </CardFooter>
-              </Card>
-            );
-          })
+          filteredUsers
+            .slice(currentPage === 1 ? 0 : 6, 6 * currentPage)
+            .map((user) => {
+              return (
+                <UserCard
+                  key={user.id}
+                  user={user}
+                  setSelectedUser={setSelectedUser}
+                  setShowDeleteUserDialog={setShowDeleteUserDialog}
+                />
+              );
+            })
         )}
       </div>
 
-      <div className="flex gap-x-4 items-center pb-6">
-        <Button
-          variant={"ghost"}
-          disabled={currentPage <= 1}
-          onClick={() => navigate("/?page=1")}
-        >
-          <ChevronLeft size={26} color="black" />
-        </Button>
-
-        <p>
-          <span className="font-semibold">{currentPage}</span>/
-          {data?.total_pages}
-        </p>
-
-        <Button
-          variant={"ghost"}
-          disabled={data && currentPage >= data.total_pages}
-          onClick={() => navigate("/?page=2")}
-        >
-          <ChevronRight size={26} color="black" />
-        </Button>
-      </div>
+      {data && (
+        <PaginationControls
+          currentPage={currentPage}
+          totalPages={data.totalPages}
+        />
+      )}
     </main>
   );
 };

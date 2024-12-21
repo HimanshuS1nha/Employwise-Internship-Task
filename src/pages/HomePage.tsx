@@ -3,17 +3,17 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Loader from "@/components/Loader";
 
+import Loader from "@/components/Loader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import BrandLogo from "@/components/BrandLogo";
 import UserCard from "@/components/UserCard";
 import DeleteUserDialog from "@/components/DeleteUserDialog";
 import PaginationControls from "@/components/PaginationControls";
+import EditUserDialog from "@/components/EditUserDialog";
 
 import type { UserType } from "../../types";
-import EditUserDialog from "@/components/EditUserDialog";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const HomePage = () => {
 
   const [users, setUsers] = useState<UserType[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null); // To store the user which is to be deleted or edited
   const [showDeleteUserDialog, setShowDeleteUserDialog] = useState(false);
   const [showEditUserDialog, setShowEditUserDialog] = useState(false);
 
@@ -39,6 +39,7 @@ const HomePage = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: [`get-users-${currentPage}`],
     queryFn: async () => {
+      // Get all the data at once and store in a state
       const { data: data1 } = (await axios.get(
         `https://reqres.in/api/users?page=1`
       )) as { data: { data: UserType[]; total_pages: number } };
@@ -142,7 +143,7 @@ const HomePage = () => {
           </div>
         ) : (
           filteredUsers
-            .slice(currentPage === 1 ? 0 : 6, 6 * currentPage)
+            .slice(currentPage === 1 ? 0 : 6, 6 * currentPage) // Show 6 results per page
             .map((user) => {
               return (
                 <UserCard

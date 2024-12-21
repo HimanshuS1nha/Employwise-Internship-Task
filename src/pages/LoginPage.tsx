@@ -43,8 +43,15 @@ const LoginPage = () => {
     },
     onSuccess: (data) => {
       toast.success("Logged in successfully");
-      localStorage.setItem("token", data.token);
+
+      localStorage.setItem("token", data.token); // Set the token in localStorage
+
+      const tokenExpiryDate = new Date();
+      tokenExpiryDate.setDate(tokenExpiryDate.getDate() + 5);
+      localStorage.setItem("token-expiry", tokenExpiryDate.toISOString()); // Set an expiry of 5 days
+
       reset();
+      
       navigate("/", { replace: true });
     },
     onError: (error) => {

@@ -12,16 +12,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Loader from "@/components/Loader";
 
 import {
   editUserValidator,
   type editUserValidatorType,
 } from "@/validators/edit-user-validator";
 import type { UserType } from "types";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import Loader from "./Loader";
 
 const EditUserDialog = ({
   isVisible,
@@ -68,6 +68,7 @@ const EditUserDialog = ({
     },
     onSuccess: () => {
       toast.success("User details edited successfully");
+      // Edit the details of the user in the list
       setUsers((prev) => {
         const newUsers = prev.map((user) => {
           if (user.id === selectedUser?.id) {

@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 const PaginationControls = ({
   currentPage,
@@ -16,7 +16,7 @@ const PaginationControls = ({
       <Button
         variant={"ghost"}
         disabled={currentPage <= 1}
-        onClick={() => navigate("/?page=1")}
+        onClick={() => navigate(`/?page=${currentPage - 1}`)}
       >
         <ChevronLeft size={26} color="black" />
       </Button>
@@ -28,7 +28,7 @@ const PaginationControls = ({
       <Button
         variant={"ghost"}
         disabled={currentPage >= totalPages}
-        onClick={() => navigate("/?page=2")}
+        onClick={() => navigate(`/?page=${currentPage + 1}`)}
       >
         <ChevronRight size={26} color="black" />
       </Button>

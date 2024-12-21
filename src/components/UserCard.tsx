@@ -20,7 +20,7 @@ const UserCard = ({
   return (
     <Card key={user.id} className="w-[90%] sm:w-[350px]">
       <CardHeader className="items-center gap-y-3">
-        <img src={user.avatar} alt={user.first_name} className="rounded-full" />
+        <img src={user.avatar} alt={user.first_name} className="rounded-full w-[120px] h-[120px] object-cover" />
         <CardTitle>
           {user.first_name} {user.last_name}
         </CardTitle>

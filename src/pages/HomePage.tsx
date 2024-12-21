@@ -143,7 +143,10 @@ const HomePage = () => {
           </div>
         ) : (
           filteredUsers
-            .slice(currentPage === 1 ? 0 : 6, 6 * currentPage) // Show 6 results per page
+            .slice(
+              currentPage === 1 || filteredUsers.length < 6 ? 0 : 6,
+              6 * currentPage
+            ) // Show 6 results per page
             .map((user) => {
               return (
                 <UserCard
@@ -162,6 +165,7 @@ const HomePage = () => {
         <PaginationControls
           currentPage={currentPage}
           totalPages={data.totalPages}
+          users={filteredUsers}
         />
       )}
     </main>

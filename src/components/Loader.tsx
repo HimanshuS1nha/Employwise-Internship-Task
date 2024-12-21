@@ -1,7 +1,15 @@
 import { Loader2 } from "lucide-react";
 
-const Loader = () => {
-  return <Loader2 color="white" className="animate-spin" />;
+import { cn } from "@/lib/utils";
+
+const Loader = ({
+  className,
+  color = "white",
+}: {
+  className?: string;
+  color?: string;
+}) => {
+  return <Loader2 color={color} className={cn("animate-spin", className)} />;
 };
 
 export default Loader;

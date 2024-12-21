@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Loader from "@/components/Loader";
+import BrandLogo from "@/components/BrandLogo";
 
 import {
   loginValidator,
@@ -64,7 +65,7 @@ const LoginPage = () => {
         />
       </div>
       <div className="w-[30%] h-full flex flex-col items-center justify-between py-4 bg-white shadow-md shadow-black">
-        <h1 className="text-primary font-bold text-5xl">Internship Task</h1>
+        <BrandLogo />
 
         <form
           className="flex flex-col gap-y-6 w-[90%] items-center"

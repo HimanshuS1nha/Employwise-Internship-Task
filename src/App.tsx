@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
+import { Route, Routes } from "react-router-dom";
+
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
 
 const App = () => {
   return (
-    <div>
-      <p className="text-xl text-red-500 font-extrabold">App</p>
-      <Button>Click Me</Button>
-    </div>
+    <Routes>
+      <Route path="/" Component={HomePage} />
+      <Route path="/login" Component={LoginPage} />
+    </Routes>
   );
 };
 

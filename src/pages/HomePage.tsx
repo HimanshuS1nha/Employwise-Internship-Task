@@ -101,7 +101,7 @@ const HomePage = () => {
     }
   }, [data]);
   return (
-    <main className="w-full h-[100dvh] flex flex-col items-center gap-y-10 mt-6 relative">
+    <main className="w-full h-[100dvh] flex flex-col items-center gap-y-10 mt-16 md:mt-6 relative">
       <DeleteUserDialog
         isVisible={showDeleteUserDialog}
         deleteUser={handleDeleteUser}
@@ -131,12 +131,12 @@ const HomePage = () => {
 
       <Input
         placeholder="Search users by name..."
-        className="w-[75%]"
+        className="w-[90%] md:w-[75%]"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
       />
 
-      <div className="flex flex-wrap gap-5 items-center justify-center w-[75%]">
+      <div className="flex flex-wrap gap-5 items-center justify-center w-[90%] md:w-[75%]">
         {isLoading ? (
           <div className="flex justify-center">
             <Loader className="size-10 animate-spin" color="blue" />

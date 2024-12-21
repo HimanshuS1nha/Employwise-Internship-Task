@@ -18,7 +18,7 @@ const UserCard = ({
   setShowEditUserDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
-    <Card key={user.id} className="w-[350px]">
+    <Card key={user.id} className="w-[90%] sm:w-[350px]">
       <CardHeader className="items-center gap-y-3">
         <img src={user.avatar} alt={user.first_name} className="rounded-full" />
         <CardTitle>

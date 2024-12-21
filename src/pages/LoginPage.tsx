@@ -64,18 +64,18 @@ const LoginPage = () => {
   });
   return (
     <div className="flex justify-center items-center w-full h-[100dvh] bg-gray-100">
-      <div className="w-[70%] h-full">
+      <div className="hidden lg:block lg:w-[60%] xl:w-[70%] h-full">
         <img
           src="/login-bg.png"
           alt="Business meet"
           className="w-full h-full object-cover"
         />
       </div>
-      <div className="w-[30%] h-full flex flex-col items-center justify-between py-4 bg-white shadow-md shadow-black">
+      <div className="w-[90%] sm:w-[75%] md:w-[60%] lg:w-[40%] xl:w-[30%] h-[85%] lg:h-full flex flex-col items-center justify-between py-6 lg:py-4 px-6 lg:px-0 bg-white shadow-md shadow-black rounded-xl lg:rounded-none">
         <BrandLogo />
 
         <form
-          className="flex flex-col gap-y-6 w-[90%] items-center"
+          className="flex flex-col gap-y-6 w-[95%] lg:w-[90%] items-center"
           onSubmit={handleSubmit((data) => handleLogin(data))}
         >
           <p className="text-primary text-3xl font-semibold">

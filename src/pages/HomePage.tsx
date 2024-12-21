@@ -13,10 +13,12 @@ import DeleteUserDialog from "@/components/DeleteUserDialog";
 import PaginationControls from "@/components/PaginationControls";
 
 import type { UserType } from "../../types";
+import EditUserDialog from "@/components/EditUserDialog";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  // For pagination
   const currentPage = searchParams.get("page")
     ? parseInt(searchParams.get("page")!)
     : 1;
@@ -25,9 +27,11 @@ const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
   const [showDeleteUserDialog, setShowDeleteUserDialog] = useState(false);
+  const [showEditUserDialog, setShowEditUserDialog] = useState(false);
 
   const filteredUsers = users.filter(
     (user) =>
+      // Check if users list contains any user matching the searchQuery or not
       user.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.last_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -103,6 +107,13 @@ const HomePage = () => {
         isPending={deleteUserPending}
         setIsVisible={setShowDeleteUserDialog}
       />
+      <EditUserDialog
+        isVisible={showEditUserDialog}
+        setIsVisible={setShowEditUserDialog}
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
+        setUsers={setUsers}
+      />
 
       <Button
         variant={"destructive"}
@@ -139,6 +150,7 @@ const HomePage = () => {
                   user={user}
                   setSelectedUser={setSelectedUser}
                   setShowDeleteUserDialog={setShowDeleteUserDialog}
+                  setShowEditUserDialog={setShowEditUserDialog}
                 />
               );
             })

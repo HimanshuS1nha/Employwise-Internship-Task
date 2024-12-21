@@ -10,10 +10,12 @@ const UserCard = ({
   user,
   setSelectedUser,
   setShowDeleteUserDialog,
+  setShowEditUserDialog,
 }: {
   user: UserType;
   setSelectedUser: React.Dispatch<React.SetStateAction<UserType | null>>;
   setShowDeleteUserDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowEditUserDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   return (
     <Card key={user.id} className="w-[350px]">
@@ -24,7 +26,12 @@ const UserCard = ({
         </CardTitle>
       </CardHeader>
       <CardFooter className="flex justify-center gap-x-4">
-        <Button>
+        <Button
+          onClick={() => {
+            setSelectedUser(user);
+            setShowEditUserDialog(true);
+          }}
+        >
           <Pencil size={20} color="white" />
         </Button>
         <Button

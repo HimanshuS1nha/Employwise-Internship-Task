@@ -20,6 +20,10 @@
     npm run build
    ```
 
+## Demo
+
+Live Demo - [Click Here](https://employwise-internship-task.vercel.app)
+
 ## Screenshots
 
 ![Employwise Internship Task 1](https://github.com/user-attachments/assets/a008ead4-6791-4b2b-944f-0df120597b14)

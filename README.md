@@ -1,4 +1,4 @@
-# Codeproofs Internship Task
+# Employwise Internship Task
 
 ## Get started
 
@@ -26,8 +26,8 @@ Live Demo - [Click Here](https://employwise-internship-task.vercel.app)
 
 ## Screenshots
 
-![Employwise Internship Task 1](https://github.com/user-attachments/assets/a008ead4-6791-4b2b-944f-0df120597b14)
----
+## ![Employwise Internship Task 1](https://github.com/user-attachments/assets/a008ead4-6791-4b2b-944f-0df120597b14)
+
 ![Employwise Internship Task 2](https://github.com/user-attachments/assets/2d9ebffe-eefa-47e8-8e37-53c8e84a77a1)
 
 ## Packages USED
